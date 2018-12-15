@@ -1,0 +1,14 @@
+
+# MyPy
+.mypy_cache/
+
+# Python
+__pycache__/
+
+# Virutalenv
+venv/
+
+# Intermediary files
+*.json
+*.csv
+*.txt
