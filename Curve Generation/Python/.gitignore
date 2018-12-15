@@ -1,4 +1,4 @@
-
+`
 # MyPy
 .mypy_cache/
 
@@ -11,4 +11,3 @@ venv/
 # Intermediary files
 *.json
 *.csv
-*.txt
