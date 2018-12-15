@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Entry point into the "application". Really a convenience to the user"""
 
 import argparse
