@@ -36,8 +36,19 @@
               "action": {
                 "type": "string",
                 "const": "generate_flight"
+              },
+              "data_file": {
+                "type": "string"
+              },
+              "random_scale": {
+                "type": "number",
+                "minimum": 0
+              },
+              "result_directory": {
+                "type": "string"
               }
-            }
+            },
+            "required": ["result_directory", "data_file", "random_scale"]
           }
         ]
       },
@@ -89,7 +100,8 @@
           "errors": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "enum": ["acceleration", "gyro"]
             },
             "minItems": 1
           },
