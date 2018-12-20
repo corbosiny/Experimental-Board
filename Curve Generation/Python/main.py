@@ -49,7 +49,7 @@ def create_argparser() -> argparse.ArgumentParser:
         help='a JSON file of a list of actions')
     parser.add_argument(
         '-s',
-        type=argparse.FileType(),
+        type=str,
         help='a JSON schema to validate against file input')
     return parser
 
@@ -128,18 +128,18 @@ def parse_action(action: Dict[str, Any]) -> None:
                                           '{:0>5}.png'.format(str(index + 1))))
 
 
-def load_schema(
-        file: IO[str] = io.open(os.path.join('schema', 'input.schema.json'))) -> Dict[str, Any]:
+def load_schema(filename: str = os.path.join('schema', 'input.schema.json')) -> Dict[str, Any]:
     """Loads and returns the JSON schema used for input validation
 
     Args:
-        file: Optional parameter to specify a different schema
+        filename: Optional parameter to specify a different schema
 
     Returns:
         python dictionary containing the schema
     """
-    schema = json.load(file)
-    file.close()
+    schema = None
+    with io.read(os.path.abspath(os.path.join(os.path.dirname(__file__), filename))) as file:
+        schema = json.load(file)
     return schema
 
 
