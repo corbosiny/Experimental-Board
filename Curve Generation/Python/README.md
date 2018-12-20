@@ -18,7 +18,7 @@ Once you can run pip commands, from this directory run `$ pip install -r require
 
 ## Usage
 
-
+Running `$ main.py --help` prints out the generic help output with argument placement and available flags
 
 ## Contributing
 
