@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Actions",
+  "description": "A list of actions for the rocket simulation software to perform",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "allOf": [
+      {
+        "required": ["action", "engine_file"]
+      },
+      {
+        "oneOf": [
+          {
+            "properties": {
+              "action": {
+                "type": "string",
+                "const": "save_rocket"
+              },
+              "filename": {
+                "type": "string"
+              }
+            },
+            "required": ["filename"]
+          },
+          {
+            "properties": {
+              "action": {
+                "type": "string",
+                "const": "plot_rocket"
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "type": "string",
+                "const": "generate_flight"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "oneOf": [
+          {
+            "properties": {
+              "diameter": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["diameter"]
+          },
+          {
+            "properties": {
+              "radius": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["radius"]
+          }
+        ]
+      },
+      {
+        "properties": {
+          "acceleration_error_constant": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "gyro_error_constant": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "base_mass": {
+            "type": "number",
+            "minimum": 0
+          },
+          "drag_coefficient": {
+            "type": "number",
+            "minimum": 0
+          },
+          "engine_file": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "initial_altitude": {
+            "type": "number",
+            "minimum": 0,
+            "$comment": "If we're launching below sea level, than this minimum is incorrect!"
+          },
+          "num_steps": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total_time": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        },
+        "dependencies": {
+          "acceleration_error_constant": {
+            "properties": {
+              "errors": {
+                "type": "array",
+                "contains": {
+                  "const": "acceleration"
+                }
+              }
+            },
+            "required": ["errors"]
+          },
+          "gyro_error_constant": {
+            "properties": {
+              "errors": {
+                "type": "array",
+                "contains": {
+                  "const": "gyro"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "oneOf": [
+          {
+            "allOf": [
+              {
+                "oneOf": [
+                  { "required": ["acceleration_error_constant"] },
+                  { "not": { "properties": { "errors": { "contains": { "const": "acceleration" } } } } }
+                ]
+              },
+              {
+                "oneOf": [
+                  { "required": ["gyro_error_constant"] },
+                  { "not": { "properties": { "errors": { "contains": { "const": "gyro" } } } } }
+                ]
+              },
+              {
+                "required": ["errors"]
+              }
+            ]
+          },
+          { "not": { "required": ["errors"] } }
+        ]
+      }
+    ]
+  }
+}

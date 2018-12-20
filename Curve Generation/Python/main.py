@@ -4,10 +4,11 @@
 import argparse
 import random
 import json
+import jsonschema
 import io
 import csv
 import os.path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, IO
 
 import data_loader
 from graph import graph_altitude
@@ -18,10 +19,17 @@ def main() -> None:
     parser = create_argparser()
     args = parser.parse_args()
 
-    if hasattr(args, 'f'):
+    if hasattr(args, 'f') and args.f != None:
+        schema = load_schema(args.s) if hasattr(
+            args, 's') and args.s != None else load_schema()
         actions = json.load(args.f)
         try:
+            jsonschema.Draft7Validator(schema).validate(actions)
             parse_actions(actions)
+            args.f.close()
+        except (jsonschema.exceptions.SchemaError,
+                jsonschema.exceptions.ValidationError) as err:
+            raise err
         except ValueError as err:
             raise ValueError('invalid input from file: ' +
                              str(args.f.name)) from err
@@ -39,6 +47,10 @@ def create_argparser() -> argparse.ArgumentParser:
         '-f',
         type=argparse.FileType(),
         help='a JSON file of a list of actions')
+    parser.add_argument(
+        '-s',
+        type=argparse.FileType(),
+        help='a JSON schema to validate against file input')
     return parser
 
 
@@ -114,6 +126,21 @@ def parse_action(action: Dict[str, Any]) -> None:
                     flags=flags,
                     filename=os.path.join(action['result_directory'],
                                           '{:0>5}.png'.format(str(index + 1))))
+
+
+def load_schema(
+        file: IO[str] = io.open(os.path.join('schema', 'input.schema.json'))) -> Dict[str, Any]:
+    """Loads and returns the JSON schema used for input validation
+
+    Args:
+        file: Optional parameter to specify a different schema
+
+    Returns:
+        python dictionary containing the schema
+    """
+    schema = json.load(file)
+    file.close()
+    return schema
 
 
 if __name__ == '__main__':

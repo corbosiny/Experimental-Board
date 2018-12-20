@@ -11,3 +11,5 @@ venv/
 # Intermediary files
 *.json
 *.csv
+
+!schema/*.json
