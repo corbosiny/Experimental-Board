@@ -81,11 +81,6 @@
             "minimum": 0,
             "exclusiveMinimum": true
           },
-          "gyro_error_constant": {
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true
-          },
           "base_mass": {
             "type": "number",
             "minimum": 0
@@ -104,6 +99,11 @@
               "enum": ["acceleration", "gyro"]
             },
             "minItems": 1
+          },
+          "gyro_error_constant": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
           },
           "initial_altitude": {
             "type": "number",
