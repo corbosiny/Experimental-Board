@@ -26,19 +26,19 @@ The more convenient way to use the utilities provided by this code is to define 
 
 The input file must be valid [JSON](https://www.json.org/). The top level object must be an array, with each item being an object identifying an action and its variables. Each individual action and its variables, required or not, are described below, but these are the variables required for all actions:
 
-| Variable | Type | Description | Required |
-| --- | --- | --- | :---: |
-| `action` | `string` | An action for the program to perform. Options for this string described in [actions](#actions) | Yes
-| `acceleration_error_constant` | `float` | A constant error associated with the accelerometer. Influences the graph of the accelerometer error curves. `acceleration` must be present in the `errors` array. | No
-| `base_mass` | `float` | Specifies the mass of an empty rocket in kilograms. | No
-| `diameter` | `float` | Diameter of rocket body in meters | Yes
-| `drag_coefficient` | `float` | Specifies the dimensionless constant associated with [this](https://en.wikipedia.org/wiki/Drag_equation) drag equation for the rocket. | No
-| `engine_file` | `string` | A path to a file specifying the properties of the engine. Currently only [RockSim](https://www.apogeerockets.com/Rocket_Software/RockSim) formatted files are supported. | Yes
-| `errors` | `array` | An array of strings determining what errors to include. Only `acceleration` and `gyro` are currently accepted, but `acceleration` is the only one implemented. Note that most errors expressed in this array will required additional parameters. | No
-| `gyro_error_constant` | `float` | An error associated with the gyroscope. Influences the graph of the gyroscope error curve | No
-| `initial_altitude` | `float` | The initial altitude of the rocket in meters. This won't factor into the graph (i.e., the graph's y-axis minimum will still be zero) but *will* factor into drag calculations | No
-| `num_steps` | `int` | The number of intervals to calculate in the graph. The larger the number, the more accurate the simulation at the cost of calculation time. | Yes
-| `total_time` | `float` | Total amount of time to simulate in seconds| Yes
+| Variable | Type | Description | Required | Default
+| --- | --- | --- | :---: | :---: |
+| `action` | `string` | An action for the program to perform. Options for this string described in [actions](#actions) | Yes | N/A
+| `acceleration_error_constant` | `float` | A constant error associated with the accelerometer. Influences the graph of the accelerometer error curves. `acceleration` must be present in the `errors` array. | No | `None`
+| `base_mass` | `float` | Specifies the mass of an empty rocket in kilograms. | No | `1`
+| `diameter` | `float` | Diameter of rocket body in meters | Yes | N/A
+| `drag_coefficient` | `float` | Specifies the dimensionless constant associated with [this](https://en.wikipedia.org/wiki/Drag_equation) drag equation for the rocket. | No | `0.05`
+| `engine_file` | `string` | A path to a file specifying the properties of the engine. Currently only [RockSim](https://www.apogeerockets.com/Rocket_Software/RockSim) formatted files are supported. | Yes | N/A
+| `errors` | `array` | An array of strings determining what errors to include. Only `acceleration` and `gyro` are currently accepted, but `acceleration` is the only one implemented. Note that most errors expressed in this array will required additional parameters. | No | `[]`
+| `gyro_error_constant` | `float` | An error associated with the gyroscope. Influences the graph of the gyroscope error curve | No | `None`
+| `initial_altitude` | `float` | The initial altitude of the rocket in meters. This won't factor into the graph (i.e., the graph's y-axis minimum will still be zero) but *will* factor into drag calculations | No | `0.00`
+| `num_steps` | `int` | The number of intervals to calculate in the graph. The larger the number, the more accurate the simulation at the cost of calculation time. | Yes | N/A
+| `total_time` | `float` | Total amount of time to simulate in seconds | Yes | N/A
 
 ### Actions
 
@@ -51,10 +51,10 @@ The simplest action, this one uses the variables given and plots the suspected f
 This action performs the same calculations as `plot_rocket`, although instead of plotting it will save the values to a [csv](https://en.wikipedia.org/wiki/Comma-separated_values) file.
 
 Additional variables for this action:
-| Variable | Type | Description | Required |
-| --- | --- | --- | :---: |
-| `delimiter` | `string` | The delimiter to use in the csv file. Don't change this unless you want to view the data in Excel or some other program | No
-| `filename` | `string` | The location for the csv file to be saved. | Yes
+| Variable | Type | Description | Required | Default |
+| --- | --- | --- | :---: | :---: |
+| `delimiter` | `string` | The delimiter to use in the csv file. Don't change this unless you want to view the data in Excel or some other program | No | ` ` (space)
+| `filename` | `string` | The location for the csv file to be saved. | Yes | N/A
 
 3. `generate_flight`
 
@@ -63,12 +63,12 @@ This action will generate a plot for each interval, denoted by `num_steps`. It's
 **Note**: This action is experimental and hasn't been fully tested. Currently the plotting and scales of the graph aren't correct. 
 
 Additional variables:
-| Variable | Type | Description | Required |
-| --- | --- | --- | :---: |
-| `data_file` | `string` | Path to previously generated data from `save_rocket`. In the future, this will contain actual data from a real flight to see how the simulation would perform.| Yes |
-| `delimiter` | `string` | Delimiter used in the `data_file`. Don't change this unless it was changed in `save_rocket`. | No
-| `random_scale` | `float` | Number that scales the randomness in the rocket's flight path. | Yes |
-| `result_directory` | `string` | Destination directory for all of the generated plots. | Yes |
+| Variable | Type | Description | Required | Default |
+| --- | --- | --- | :---: | :---: |
+| `data_file` | `string` | Path to previously generated data from `save_rocket`. In the future, this will contain actual data from a real flight to see how the simulation would perform.| Yes | N/A
+| `delimiter` | `string` | Delimiter used in the `data_file`. Don't change this unless it was changed in `save_rocket`. | No | ` ` (space)
+| `random_scale` | `float` | Number that scales the randomness in the rocket's flight path. | Yes | N/A
+| `result_directory` | `string` | Destination directory for all of the generated plots. | Yes | N/A
 
 
 ## Contributing
