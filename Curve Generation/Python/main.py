@@ -138,7 +138,7 @@ def load_schema(filename: str = os.path.join('schema', 'input.schema.json')) -> 
         python dictionary containing the schema
     """
     schema = None
-    with io.read(os.path.abspath(os.path.join(os.path.dirname(__file__), filename))) as file:
+    with io.open(os.path.abspath(os.path.join(os.path.dirname(__file__), filename)), 'r') as file:
         schema = json.load(file)
     return schema
 
