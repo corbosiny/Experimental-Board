@@ -22,24 +22,53 @@ Running `$ main.py --help` prints out the help output with argument placement an
 
 The classes and methods can be used by themselves in isolation. Run python in interactive mode, import the desired modules/packages, and run the code. Documentation can be found using the `__doc__` attribute on each function/method/module itself, or just read from the source code.
 
-The more convenient way to use the utilities provided by this code is to define the actions you want performed in a file and use the `-f` flag. This would look like `$ main.py -f input.json` if `input.json` was within your current directory.  The schema for this input file is defined [here](https://github.com/Longhorn-Rocketry-Association/Experimental-Board/blob/master/Curve%20Generation/Python/schema/input.schema.json), but a more user-friendly description of how to construct this file is defined below.
+The more convenient way to use the utilities provided by this code is to define the actions you want performed in a file and use the `-f` flag. This would look like `$ main.py -f input.json` if `input.json` was within your current directory.  The schema for this input file is defined [here](https://github.com/Longhorn-Rocketry-Association/Experimental-Board/blob/master/Curve%20Generation/Python/schema/input.schema.json), but a more thorough description of how to construct this file is defined below.
 
 The input file must be valid [JSON](https://www.json.org/). The top level object must be an array, with each item being an object identifying an action and its variables. Each individual action and its variables, required or not, are described below, but these are the variables required for all actions:
 
 | Variable | Type | Description | Required |
 | --- | --- | --- | :---: |
+| `action` | `string` | An action for the program to perform. Options for this string described in [actions](#actions) | Yes
 | `acceleration_error_constant` | `float` | A constant error associated with the accelerometer. Influences the graph of the accelerometer error curves. `acceleration` must be present in the `errors` array. | No
 | `base_mass` | `float` | Specifies the mass of an empty rocket in kilograms. | No
+| `diameter` | `float` | Diameter of rocket body in meters | Yes
 | `drag_coefficient` | `float` | Specifies the dimensionless constant associated with [this](https://en.wikipedia.org/wiki/Drag_equation) drag equation for the rocket. | No
 | `engine_file` | `string` | A path to a file specifying the properties of the engine. Currently only [RockSim](https://www.apogeerockets.com/Rocket_Software/RockSim) formatted files are supported. | Yes
-| `errors` | `array` | An array of strings determining what errors to include. Only `acceleration` and `gyro` are currently accepted, but `acceleration` is the only one implemented. Note that most errors expressed in this array will required additional parameters. |No
+| `errors` | `array` | An array of strings determining what errors to include. Only `acceleration` and `gyro` are currently accepted, but `acceleration` is the only one implemented. Note that most errors expressed in this array will required additional parameters. | No
 | `gyro_error_constant` | `float` | An error associated with the gyroscope. Influences the graph of the gyroscope error curve | No
 | `initial_altitude` | `float` | The initial altitude of the rocket in meters. This won't factor into the graph (i.e., the graph's y-axis minimum will still be zero) but *will* factor into drag calculations | No
-| `num_steps` | `int` | The number of intervals to calculate in the graph. The larger the number, the more accurate the simulation at the cost of calculation time. | No
-| `total_time` | `float` | Total amount of time to simulate. | No
+| `num_steps` | `int` | The number of intervals to calculate in the graph. The larger the number, the more accurate the simulation at the cost of calculation time. | Yes
+| `total_time` | `float` | Total amount of time to simulate in seconds| Yes
 
+### Actions
 
+1. `plot_rocket`
 
+The simplest action, this one uses the variables given and plots the suspected flight path of the rocket. No additional variables are required
+
+2. `save_rocket`
+
+This action performs the same calculations as `plot_rocket`, although instead of plotting it will save the values to a [csv](https://en.wikipedia.org/wiki/Comma-separated_values) file.
+
+Additional variables for this action:
+| Variable | Type | Description | Required |
+| --- | --- | --- | :---: |
+| `delimiter` | `string` | The delimiter to use in the csv file. Don't change this unless you want to view the data in Excel or some other program | No
+| `filename` | `string` | The location for the csv file to be saved. | Yes
+
+3. `generate_flight`
+
+This action will generate a plot for each interval, denoted by `num_steps`. It's useful for tracking how the simulation behaves for a rocket's entire flight duration. Once all the graphs are generated, they can be strung together to show the sim's behavior for an entire launch.
+
+**Note**: This action is experimental and hasn't been fully tested. Currently the plotting and scales of the graph aren't correct. 
+
+Additional variables:
+| Variable | Type | Description | Required |
+| --- | --- | --- | :---: |
+| `data_file` | `string` | Path to previously generated data from `save_rocket`. In the future, this will contain actual data from a real flight to see how the simulation would perform.| Yes |
+| `delimiter` | `string` | Delimiter used in the `data_file`. Don't change this unless it was changed in `save_rocket`. | No
+| `random_scale` | `float` | Number that scales the randomness in the rocket's flight path. | Yes |
+| `result_directory` | `string` | Destination directory for all of the generated plots. | Yes |
 
 
 ## Contributing
