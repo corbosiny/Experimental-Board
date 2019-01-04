@@ -51,6 +51,7 @@ The simplest action, this one uses the variables given and plots the suspected f
 This action performs the same calculations as `plot_rocket`, although instead of plotting it will save the values to a [csv](https://en.wikipedia.org/wiki/Comma-separated_values) file.
 
 Additional variables for this action:
+
 | Variable | Type | Description | Required | Default |
 | --- | --- | --- | :---: | :---: |
 | `delimiter` | `string` | The delimiter to use in the csv file. Don't change this unless you want to view the data in Excel or some other program | No | ` ` (space)
@@ -63,6 +64,7 @@ This action will generate a plot for each interval, denoted by `num_steps`. It's
 **Note**: This action is experimental and hasn't been fully tested. Currently the plotting and scales of the graph aren't correct. 
 
 Additional variables:
+
 | Variable | Type | Description | Required | Default |
 | --- | --- | --- | :---: | :---: |
 | `data_file` | `string` | Path to previously generated data from `save_rocket`. In the future, this will contain actual data from a real flight to see how the simulation would perform.| Yes | N/A
