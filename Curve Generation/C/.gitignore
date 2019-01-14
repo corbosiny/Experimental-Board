@@ -1,0 +1,7 @@
+# platformio
+.pio
+.pioenvs
+.piolibdeps
+
+# python
+venv/
