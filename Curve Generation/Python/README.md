@@ -1,6 +1,6 @@
 # Curve Generation - Python
 
-This is a collection of python modules for visualizing rocket simulation and testing algorithms
+Collection of python modules for visualizing rocket simulation and testing algorithms
 
 ## Requirements
 1. [Python](https://www.python.org/) version 3.6+
