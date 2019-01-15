@@ -44,7 +44,7 @@ class DensityCalculator(object):
         pressure: An interpoloate for calculating pressure
     """
 
-    R: float = 8.31447
+    R: float = 8.3144568
     M: float = 0.0289644
     g: float = 9.80665
     L: float = 0.0065
