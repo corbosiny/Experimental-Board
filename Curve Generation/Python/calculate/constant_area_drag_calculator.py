@@ -63,6 +63,8 @@ class ConstantAreaDragCalculator(object):
             Measured drag force in Newtons.
         """
         density = self.density(height)
+        drag_coefficient = drag_coefficient or self._drag_coefficient
+
         return self.calculate_drag(
             velocity,
             drag_coefficient,
