@@ -5,8 +5,9 @@
 #ifndef _CURVE_GEN_INTERPOLATE_H_
 #define _CURVE_GEN_INTERPOLATE_H_
 
+#include <iostream>
+#include <inttypes.h>
 #include <array>
-#include <type_traits>
 #include <utility>
 
 /**
@@ -19,7 +20,7 @@
  * @returns the index i of the array such that array[i] <= key < array[i + 1]
  */
 template<size_t size>
-size_t BinarySearch(
+int64_t BinarySearch(
   const std::array<std::pair<double, double>, size> &array,
   double key
 ) {
@@ -31,10 +32,10 @@ size_t BinarySearch(
 
   /* Handle keys outside of the array range first */
   if (key > array[size - 1].first) {
-      return size;
+    return size;
   }
   else if (key < array[0].first) {
-      return -1;
+    return -1;
   }
 
   /*
@@ -73,7 +74,7 @@ double Interp(
   const std::array<std::pair<double, double>, size> &array,
   double key
 ) {
-  size_t index = BinarySearch<size>(array, key);
+  int64_t index = BinarySearch<size>(array, key);
   if (index < 0) {
     return array[0].second;
   }
