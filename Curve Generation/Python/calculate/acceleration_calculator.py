@@ -173,8 +173,7 @@ class AccelerationCalculatorDrag(AccelerationCalculator):
         self._density = density_calculator.DensityCalculator(**kwargs)
         kwargs.setdefault('density', self._density)
 
-        self._drag = ConstantAreaDragCalculator(
-            **kwargs)
+        self._drag = ConstantAreaDragCalculator(**kwargs)
 
     @property
     def drag(self) -> Callable:

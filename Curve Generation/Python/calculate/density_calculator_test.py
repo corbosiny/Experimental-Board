@@ -1,4 +1,3 @@
-
 """Unit test script for the air density calculator.
 
 Hopefully, during the competition launch, we'll just have a table of density
@@ -8,6 +7,7 @@ values that we can index by altitude.
 import unittest
 
 from calculate import density_calculator
+
 
 class DensityCalculatorTest(unittest.TestCase):
     """Unittest class for the density calculator"""
@@ -23,6 +23,7 @@ class DensityCalculatorTest(unittest.TestCase):
         result = density(height=1524)
 
         self.assertLess(abs(0.9352297623 - result), 0.0000001)
+
 
 if __name__ == '__main__':
     unittest.main()

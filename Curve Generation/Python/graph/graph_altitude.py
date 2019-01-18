@@ -22,6 +22,7 @@ class GRAPH(enum.IntFlag):
     ACCELERATION = 1 << 3
     ACCELEROMETER_ERROR = 1 << 4
     SAVE_PLOT = 1 << 5
+    VELOCITY = 1 << 6
 
 
 class AltitudeGrapher(object):
@@ -420,11 +421,15 @@ class AltitudeGrapher(object):
 
         with io.open(filename, 'w', newline='\n') as file:
             writer = csv.writer(file, delimiter=' ')
-            for time_value, altitude_value in zip(time, altitude_drag):
+            for time_value, altitude_value, velocity_value in zip(
+                    time, altitude_drag, altitude_drag.get_velocity_iter()):
                 row = [time_value]
                 if flags & GRAPH.ALTITUDE:
                     row.append(altitude_value)
                 if flags & GRAPH.ACCELERATION:
                     row.append(acceleration_drag(time_value))
+                if flags & GRAPH.VELOCITY:
+                    row.append(velocity_value)
+                    # pass
 
                 writer.writerow(row)

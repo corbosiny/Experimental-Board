@@ -78,6 +78,12 @@ class SteppingVerletIntegrator(object):
 
         self.past_n_steps = math.ceil(time_cumulation / (time_step * 1000))
         self._acceleration_error_constant = acceleration_error_constant
+        self._velocity_storage = []
+
+    @property
+    def velocity_storage(self):
+        return np.array(self._velocity_storage)
+    
 
     def fill_values(self, array: List[float]) -> int:
         """If present, uses any collected data to fill in the integrator
@@ -264,6 +270,8 @@ class SteppingVerletIntegrator(object):
                 / seconds ^ 2
         """
         velocity = self.get_velocity(index, array)
+
+        self._velocity_storage.insert(min(index, len(self._velocity_storage)), velocity)
         acceleration = self.acceleration(
             time=self.time_step * (index - 1),
             velocity=velocity,
@@ -284,6 +292,15 @@ class SteppingVerletIntegrator(object):
         """
         self.__getitem__(self._num_steps - 1)
         return iter(self._previous_values[self.last_index:])
+
+    def get_velocity_iter(self):
+        """Returns an iterator for the internal velocity storage
+
+        Returns:
+            iterator for velocity
+
+        """
+        return iter(self._velocity_storage)
 
     def __len__(self):
         """Returns the number of steps"""

@@ -1,6 +1,6 @@
-
 from typing import Callable
 import numpy as np
+
 
 class ConstantAreaDragCalculator(object):
     """Calculates drag according to https://en.wikipedia.org/wiki/Drag_equation
@@ -10,9 +10,14 @@ class ConstantAreaDragCalculator(object):
             a function of height
 
     """
-    def __init__(self, area: float = None, diameter: float = None,
-                 radius: float = None, drag_coefficient: float = None,
-                 density: Callable[[float], float] = None, **kwargs):
+
+    def __init__(self,
+                 area: float = None,
+                 diameter: float = None,
+                 radius: float = None,
+                 drag_coefficient: float = None,
+                 density: Callable[[float], float] = None,
+                 **kwargs):
         """Initializes the DragCalculator object
 
         Args:
@@ -32,9 +37,9 @@ class ConstantAreaDragCalculator(object):
         if area != None:
             self._area = area
         elif diameter != None:
-            self._area = (diameter * 0.5) ** 2 * np.pi
+            self._area = (diameter * 0.5)**2 * np.pi
         elif radius != None:
-            self._area = radius ** 2 * np.pi
+            self._area = radius**2 * np.pi
         else:
             raise TypeError('one of \'area\', \'radius\', \
                              or \'diameter\' must be defined')
@@ -44,19 +49,17 @@ class ConstantAreaDragCalculator(object):
         else:
             self.density = density
 
-        self._drag_coefficient = drag_coefficient 
-
+        self._drag_coefficient = drag_coefficient
 
     @property
     def area(self) -> float:
         """Returns the precomputed area from initialization"""
         return self._area
 
-
-    def __call__(
-        self,
-        velocity: float = None, height: float = None,
-        drag_coefficient: float = None) -> float:
+    def __call__(self,
+                 velocity: float = None,
+                 height: float = None,
+                 drag_coefficient: float = None) -> float:
         """Calculates the drag at the specified point
 
         Returns:
@@ -65,16 +68,13 @@ class ConstantAreaDragCalculator(object):
         density = self.density(height)
         drag_coefficient = drag_coefficient or self._drag_coefficient
 
-        return self.calculate_drag(
-            velocity,
-            drag_coefficient,
-            density
-        )
+        return self.calculate_drag(velocity, drag_coefficient, density)
 
-
-    def calculate_drag(self, velocity: float = None,
+    def calculate_drag(self,
+                       velocity: float = None,
                        drag_coefficient: float = None,
-                       density: float = None, **kwargs) -> float:
+                       density: float = None,
+                       **kwargs) -> float:
         """Calculates the drag from the given keyword arguments
 
         Args:
@@ -87,5 +87,5 @@ class ConstantAreaDragCalculator(object):
             float: (KILOGRAMS * METERS / SECONDS ^ 2) (NEWTONS) the drag at the
                 specified point
         """
-        return (0.5 * density * velocity * velocity *
-            drag_coefficient * self._area)
+        return (0.5 * density * velocity * velocity * drag_coefficient *
+                self._area)

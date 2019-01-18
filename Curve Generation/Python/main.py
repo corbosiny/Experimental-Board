@@ -97,7 +97,7 @@ def parse_action(action: Dict[str, Any]) -> None:
         grapher.plot(flags=flags)
 
     elif action_type == 'save_rocket':
-        flags = graph_altitude.GRAPH.ALTITUDE | graph_altitude.GRAPH.ACCELERATION
+        flags = graph_altitude.GRAPH.ALTITUDE | graph_altitude.GRAPH.ACCELERATION | graph_altitude.GRAPH.VELOCITY
         grapher.save(action['filename'], flags=flags)
 
     elif action_type == 'generate_flight':
