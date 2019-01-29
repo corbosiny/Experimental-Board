@@ -126,14 +126,9 @@ void test_normal_case_2(void) {
 }
 
 /**
- * Entypoint for the test code
- * @param argc integer representing the number of command line arguments.
- *   Not relevant in a testing context
- * @param argv string array of the command line arguments. Also not relevant
- *  in a testing environment
- * @returns exit code of the program
+ * Portable function to run all the tests
  */
-int main(int argc, char* argv[]) {
+void run_tests() {
   UNITY_BEGIN();
 
   RUN_TEST(test_above_domain_1);
@@ -152,7 +147,44 @@ int main(int argc, char* argv[]) {
   RUN_TEST(test_normal_case_2);
 
   UNITY_END();
+}
+
+
+#ifdef ARDUINO
+
+#include <Arduino.h>
+
+/**
+ * Setup for arduino framework. Called once at the beginning of testing
+ */
+void setup() {
+  // NOTE!!! Wait for >2 secs
+  // if board doesn't support software reset via Serial.DTR/RTS
+  delay(2000);
+
+  run_tests();
+}
+
+/**
+ * Loop function for arduino framework. Called repeatedly
+ */
+void loop() {}
+
+#else
+
+/**
+ * Entypoint for the test code
+ * @param argc integer representing the number of command line arguments.
+ *   Not relevant in a testing context
+ * @param argv string array of the command line arguments. Also not relevant
+ *  in a testing environment
+ * @returns exit code of the program
+ */
+int main(int argc, char* argv[]) {
+  run_tests();
   return 0;
 }
+
+#endif
 
 

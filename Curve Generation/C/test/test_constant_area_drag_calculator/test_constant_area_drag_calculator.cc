@@ -19,6 +19,40 @@ void test_zeros(void) {
 }
 
 /**
+ * Portable function to run all the tests
+ */
+void run_tests() {
+  UNITY_BEGIN();
+
+  RUN_TEST(test_valid_parameters);
+  RUN_TEST(test_zeros);
+
+  UNITY_END();
+}
+
+#ifdef ARDUINO
+
+#include <Arduino.h>
+
+/**
+ * Setup for arduino framework. Called once at the beginning of testing
+ */
+void setup() {
+  // NOTE!!! Wait for >2 secs
+  // if board doesn't support software reset via Serial.DTR/RTS
+  delay(2000);
+
+  run_tests();
+}
+
+/**
+ * Loop function for arduino framework. Called repeatedly
+ */
+void loop() {}
+
+#else
+
+/**
  * Entypoint for the test code
  * @param argc integer representing the number of command line arguments.
  *   Not relevant in a testing context
@@ -27,11 +61,9 @@ void test_zeros(void) {
  * @returns exit code of the program
  */
 int main(int argc, char* argv[]) {
-  UNITY_BEGIN();
-
-  RUN_TEST(test_valid_parameters);
-  RUN_TEST(test_zeros);
-
-  UNITY_END();
+  run_tests();
   return 0;
 }
+
+#endif
+
