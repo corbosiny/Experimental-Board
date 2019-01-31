@@ -5,7 +5,6 @@
 #ifndef _CURVE_GEN_INTERPOLATE_H_
 #define _CURVE_GEN_INTERPOLATE_H_
 
-#include <iostream>
 #include <inttypes.h>
 #include <array>
 #include <utility>
