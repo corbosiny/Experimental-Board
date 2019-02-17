@@ -8,9 +8,8 @@
 /**
  * Note(Sam): This array is static
  * https://en.cppreference.com/w/cpp/language/storage_duration#Storage_duration
- * and is trivially destructible from the use of `constexpr`
  */
-constexpr std::array<std::pair<double, double>, kNumPressureTableValues> kPressureTable = {{
+std::pair<double, double> kPressureTable[kNumPressureTableValues] = {
   { 0, 101.3 }, { 152, 99.4 }, { 305, 97.6 },
   { 457, 95.8 }, { 610, 94.1 }, { 762, 92.4 },
   { 914 , 90.7 }, { 1067, 89.1 }, { 1219, 87.4 },
@@ -32,7 +31,7 @@ constexpr std::array<std::pair<double, double>, kNumPressureTableValues> kPressu
   { 8230, 34.5 }, { 8382, 33.7 }, { 8534, 32.9 },
   { 8687, 32.2 }, { 8839, 31.5 }, { 8992, 30.8 },
   { 9144, 30.1 }
-}};
+};
 
 /**
  * Ideal (universal) gas constant. Expressed in Joules / (mol * Kelvin).
@@ -71,7 +70,8 @@ double calculate_density(double start_height, double height) {
 
   double altitude = start_height + height;
   double temperature = kT_0 - kL * altitude;
-  double pressure = Interp<kNumPressureTableValues>(kPressureTable, altitude);
+
+  double pressure = Interp(kPressureTable, kNumPressureTableValues, altitude);
 
   // Converting from kilopascals to Pascals,
   // which is expressed in (Joules / meter ^ 3)

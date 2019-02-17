@@ -12,7 +12,7 @@
  * Static pressure table at various altitudes
  */
 const size_t kNumPressureTableValues = 61;
-extern const std::array<std::pair<double, double>, kNumPressureTableValues> kPressureTable;
+extern std::pair<double, double> kPressureTable[];
 
 /**
  * Calculates the density from the given height.

@@ -1,6 +1,21 @@
 /**
- * Tests the density calculator with valid parameters
+ * @file test_density_calculator.cc
+ * @brief Tests the density calculator
  */
+
+#ifdef ARDUINO
+
+#include <Arduino.h>
+
+namespace std {
+  void __throw_length_error( char const*e ) {
+    Serial.print("Length Error :");
+    Serial.println(e);
+    while(1);
+  }
+}
+
+#endif
 
 #include <unity.h>
 
@@ -35,8 +50,6 @@ void run_tests() {
 
 
 #ifdef ARDUINO
-
-#include <Arduino.h>
 
 /**
  * Setup for arduino framework. Called once at the beginning of testing

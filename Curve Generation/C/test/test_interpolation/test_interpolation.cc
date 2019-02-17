@@ -1,17 +1,34 @@
 /**
- * Defines tests that are above the domain of interpolation
+ * @file test_interpolation.cc
+ * @brief Defines tests that are above the domain of interpolation
  */
+
+#ifdef ARDUINO
+
+#include <Arduino.h>
+
+namespace std {
+  void __throw_length_error( char const*e ) {
+    Serial.print("Length Error :");
+    Serial.println(e);
+    while(1);
+  }
+}
+
+#endif
 
 #include <unity.h>
 
 #include "interpolate.h"
 
 /**
- * Tests for a key above the domain in a small array
+ * @brief Tests for a key above the domain in a small array
+ * 
  */
 void test_above_domain_1(void) {
-  std::array<std::pair<double, double>, 3> array = {{ {0, 0}, {1, 1}, {2, 2} }};
-  double result = Interp<3>(array, 3);
+  size_t array_size = 3;
+  std::pair<double, double> array[] = { {0, 0}, {1, 1}, {2, 2} };
+  double result = Interp(array, array_size, 3);
   TEST_ASSERT_EQUAL_FLOAT(2, result);
 }
 
@@ -19,11 +36,12 @@ void test_above_domain_1(void) {
  * Tests for a key above the domain in a large array
  */
 void test_above_domain_2(void) {
-  std::array<std::pair<double, double>, 10> array = {{
+  size_t array_size = 10;
+  std::pair<double, double> array[] = {
     {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4},
     {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}
-  }};
-  double result = Interp<10>(array, 11);
+  };
+  double result = Interp(array, array_size, 11);
   TEST_ASSERT_EQUAL_FLOAT(9, result);
 }
 
@@ -31,8 +49,9 @@ void test_above_domain_2(void) {
  * Tests for a key above the domain in an array of one element
  */
 void test_above_domain_3(void) {
-  std::array<std::pair<double, double>, 1> array = {{ {0, 0} }};
-  double result = Interp<1>(array, 1);
+  size_t array_size = 1;
+  std::pair<double, double> array[] = { {0, 0} };
+  double result = Interp(array, array_size, 1);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 }
 
@@ -40,8 +59,9 @@ void test_above_domain_3(void) {
  * Tests for a key below the domain in a small array
  */
 void test_below_domain_1(void) {
-  std::array<std::pair<double, double>, 3> array = {{ {0, 0}, {1, 1}, {2, 2} }};
-  double result = Interp<3>(array, -1);
+  size_t array_size = 3;
+  std::pair<double, double> array[] = { {0, 0}, {1, 1}, {2, 2} };
+  double result = Interp(array, array_size, -1);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 }
 
@@ -49,11 +69,12 @@ void test_below_domain_1(void) {
  * Tests for a key below the domain in a large array
  */
 void test_below_domain_2(void) {
-  std::array<std::pair<double, double>, 10> array = {{
+  size_t array_size = 10;
+  std::pair<double, double> array[] = {
     {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4},
     {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}
-  }};
-  double result = Interp<10>(array, -1);
+  };
+  double result = Interp(array, array_size, -1);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 }
 
@@ -61,8 +82,9 @@ void test_below_domain_2(void) {
  * Tests for a key below the domain in an array of one element
  */
 void test_below_domain_3(void) {
-  std::array<std::pair<double, double>, 1> array = {{ {0, 0} }};
-  double result = Interp<1>(array, -1);
+  size_t array_size = 1;
+  std::pair<double, double> array[] = { {0, 0} };
+  double result = Interp(array, array_size, -1);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 }
 
@@ -70,11 +92,12 @@ void test_below_domain_3(void) {
  * Tests for a key within the domain in a small array on an edge
  */
 void test_within_domain_1(void) {
-  std::array<std::pair<double, double>, 3> array = {{ {0, 0}, {1, 1}, {2, 2} }};
-  double result = Interp<3>(array, 0);
+  size_t array_size = 3;
+  std::pair<double, double> array[] = { {0, 0}, {1, 1}, {2, 2} };
+  double result = Interp(array, array_size, 0);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 
-  result = Interp<3>(array, 2);
+  result = Interp(array, array_size, 2);
   TEST_ASSERT_EQUAL_FLOAT(2, result);
 }
 
@@ -82,14 +105,15 @@ void test_within_domain_1(void) {
  * Tests for a key within the domain in a large array on an edge
  */
 void test_within_domain_2(void) {
-  std::array<std::pair<double, double>, 10> array = {{
+  size_t array_size = 10;
+  std::pair<double, double> array[] = {
     {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4},
     {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}
-  }};
-  double result = Interp<10>(array, 0);
+  };
+  double result = Interp(array, array_size, 0);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 
-  result = Interp<10>(array, 9);
+  result = Interp(array, array_size, 9);
   TEST_ASSERT_EQUAL_FLOAT(9, result);
 }
 
@@ -97,8 +121,9 @@ void test_within_domain_2(void) {
  * Tests for a key within the domain in an array of one element
  */
 void test_within_domain_3(void) {
-  std::array<std::pair<double, double>, 1> array = {{ {0, 0} }};
-  double result = Interp<1>(array, 0);
+  size_t array_size = 1;
+  std::pair<double, double> array[] = { {0, 0} };
+  double result = Interp(array, array_size, 0);
   TEST_ASSERT_EQUAL_FLOAT(0, result);
 }
 
@@ -107,8 +132,9 @@ void test_within_domain_3(void) {
  * array
  */
 void test_normal_case_1(void) {
-  std::array<std::pair<double, double>, 2> array = {{ {1, 1}, {2, 2} }};
-  double result = Interp<2>(array, 1.5);
+  size_t array_size = 2;
+  std::pair<double, double> array[] = { {1, 1}, {2, 2} };
+  double result = Interp(array, array_size, 1.5);
   TEST_ASSERT_EQUAL_FLOAT(1.5, result); 
 }
 
@@ -117,11 +143,12 @@ void test_normal_case_1(void) {
  * array
  */
 void test_normal_case_2(void) {
-  std::array<std::pair<double, double>, 10> array = {{
+  size_t array_size = 10;
+  std::pair<double, double> array[] = {
     {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4},
     {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}
-  }};
-  double result = Interp<10>(array, 4.5);
+  };
+  double result = Interp(array, array_size, 4.5);
   TEST_ASSERT_EQUAL_FLOAT(4.5, result); 
 }
 
@@ -149,10 +176,7 @@ void run_tests() {
   UNITY_END();
 }
 
-
 #ifdef ARDUINO
-
-#include <Arduino.h>
 
 /**
  * Setup for arduino framework. Called once at the beginning of testing
@@ -186,5 +210,3 @@ int main(int argc, char* argv[]) {
 }
 
 #endif
-
-

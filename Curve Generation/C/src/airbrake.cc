@@ -5,6 +5,8 @@
 
 #ifdef ARDUINO
 
+#include <Arduino.h>
+
 // Global flags to configure code
 #define ACCEL_NUMBER  0  // a flag that contains the number code for which accelerometer chip we are using 
 #define USING_LSM     0
@@ -66,6 +68,16 @@ IntervalTimer stratoTimer;
 IntervalTimer accelTimer;
 IntervalTimer baroTimer;
 
+void stratoHandler();
+void baroHandler();
+void accelHandler();
+
+void updateGyroReadings();
+void updateMagReadings();
+
+void updateLSMreadings();
+void updateADXreadings();
+
 void setup() 
 {
   Serial.begin(9600);
@@ -99,15 +111,15 @@ bool getFifo(int fifoNum, float* elem)
 {
   if(fifoIndicies[fifoNum][0] == fifoIndicies[fifoNum][1]) 
   {
-     *elem = NULL;
-     return false;
+    *elem = 0;
+    return false;
   }
   else
   {
-     int getIndex = fifoIndicies[fifoNum][0];
-     *elem = fifos[fifoNum][getIndex];
-     fifoIndicies[fifoNum][0] = (getIndex + 1) % FIFO_LENGTH;
-     return true;
+    int getIndex = fifoIndicies[fifoNum][0];
+    *elem = fifos[fifoNum][getIndex];
+    fifoIndicies[fifoNum][0] = (getIndex + 1) % FIFO_LENGTH;
+    return true;
   }
 }
 
@@ -172,8 +184,7 @@ void updateADXreadings()
   putFifo(ACCEL_Z_FIFO, az);
 }
 
-void updateGyroReadings()
-{
+void updateGyroReadings() {
   if (imu.gyroAvailable())
   {
     imu.readGyro();
