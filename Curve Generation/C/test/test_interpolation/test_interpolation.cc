@@ -1,6 +1,6 @@
 /**
  * @file test_interpolation.cc
- * @brief Defines tests that are above the domain of interpolation
+ * @brief Defines tests for the interpolation function
  */
 
 #ifdef ARDUINO

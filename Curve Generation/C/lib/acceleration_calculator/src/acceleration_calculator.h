@@ -27,7 +27,7 @@ double calculate_acceleration(
 ) {
   assert(collected_data_size >= 0);
 
-  if (collected_data_size > 0) {
+  if (collected_data_size > 0 && collected_data != NULL) {
     std::pair<double, double> last_recorded_thrust = collected_data[collected_data_size - 1];
 
     if (time <= last_recorded_thrust.first) {
